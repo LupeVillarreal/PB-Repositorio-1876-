@@ -8,7 +8,7 @@ struct Alumno
 	string apellido;
 	char correo[30];
 	char telefono[12];
-	char matricula[7];
+	int matricula;
 	float calif1;
 	float calif2;
 	float calif3;
@@ -25,6 +25,8 @@ void mod();
 void mostrar();
 void menu();
 void instruc();
+void edit(int x);
+void delet(int x);
 
 
 void main(){
@@ -42,6 +44,8 @@ void menu(){
 	case 1: instruc();
 		break;
 	case 2: registrar();
+		break;
+	case 3: mod();
 		break;
 	case 4: mostrar();
 		break;
@@ -109,21 +113,19 @@ void registrar() {
 		}
 	}
 	int contador = 0;
-	cout << "Matrícula ";
-	condition1 = false;
-	while (!condition1) {
+	cout << "Matricula ¿generar(0) o ingresar(1)? ";
+	int opm;
+	cin >> opm;
+	while (opm != 0 && opm != 1) {
+		cout << "ingrese otra opción ";
+		cin >> opm;
+	}
+	if (opm == 0) {
+		P[cont].matricula = cont + 1;
+	}
+	else if (opm == 1) {
+		cout << "Ingrese matrícula ";
 		cin >> P[cont].matricula;
-		for (i = 0; i < 7; i++) {
-			if (P[cont].matricula[i] >= 48 && P[cont].matricula[i] <= 57) {
-				contador++;
-			}
-		}
-		if (contador == 7) {
-			condition1 = true;
-		}
-		else {
-			cout << "matricula incorrecta, vovler a registrar\n";
-		}
 	}
 	cin.ignore();
 	cout << "Casa y calle ";
@@ -179,5 +181,65 @@ void mostrar(){
 }
 
 void mod() {
+	system("cls");
+	cout << "¿a quien deseas buscar? (Matricula): ";
+	int buscado, elegido, opmod;
+	bool encontrado = false;
+	cin >> buscado;
+	for (int i = 0; i < cont; i++) {
+		if (P[i].matricula == buscado) {
+			cout << "Se encontro a " << P[i].matricula << "\nNombre: " << P[i].nombre << "\nApellido: " << P[i].apellido << "\n¿Que desea hacer? ";
+			elegido = i;
+			encontrado = true;
+			break;
+		}
+	}
+	if (!encontrado) {
+		cout << "no se encontró, caballero :(";
+	}
+	cout << "\n¿Que desea hacer con el usuario\n" << P[elegido].matricula << "?";
+	cout << "1.- Modificar \n 2.-Eliminar\n";
+	cin >> opmod;
+	while (opmod != 1 && opmod != 2) {
+		cout << "no valido, vuelva a seleccionar: ";
+		cin >> opmod;
+	}
+	switch (opmod)
+	{
+	case 1: edit(elegido);
+		break;
+	case 2: delet(elegido);
+		break;
+	}
+}
 
+void edit(int x) {
+	system("cls");
+	cout << "¿que desea editar del usuario " << P[x].matricula << "?";
+	cout << "\n1.-Nombre \n2.-Apellido \n3.-Correo \n4.-Teléfono \n5.-Dirección \n6.-primer parcial \n7.-segundo parcial \n8.-tercer parcial";
+	int opedit;
+	cin >> opedit;
+}
+
+void delet(int x) {
+	system("cls");
+	int opdelet;
+	cout << "¿desea eliminar a " << P[x].nombre << ", (" << P[x].matricula << ") ? (1-Si/2-No): ";
+	cin >> opdelet;
+	while (opdelet != 1 && opdelet != 2) {
+		cout << "no valido, vuelva a seleccionar: ";
+		cin >> opdelet;
+	}
+	if (opdelet == 1 && cont != 0) {
+		for (int i = x; i < cont; i++) {
+			P[x] = P[x + 1];
+		}
+		cont--;
+		cout << "se a eliminado exitosamente" << endl;
+		system("pause>nul");
+		menu();
+	}
+	else if (opdelet == 2) {
+		menu();
+	}
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 struct Alumno
@@ -112,17 +113,17 @@ void registrar() {
 			cout << "telefono incorrecto, vuelva a registrar los datos\n";
 		}
 	}
-	cout << "Matricula ¿generar(0) o ingresar(1)? ";
+	cout << "Matricula ¿generar(1) o ingresar(2)? ";
 	int opm;
 	cin >> opm;
-	while (opm != 0 && opm != 1) {
+	while (opm != 1 && opm != 2) {
 		cout << "ingrese otra opción ";
 		cin >> opm;
 	}
-	if (opm == 0) {
+	if (opm == 1) {
 		P[cont].matricula = cont + 1;
 	}
-	else if (opm == 1) {
+	else if (opm == 2) {
 		cout << "Ingrese matrícula ";
 		cin >> P[cont].matricula;
 	}
@@ -156,6 +157,21 @@ void registrar() {
 		cin >> P[cont].calif3;
 	}
 	P[cont].califtotal = (P[cont].calif1*0.3) + (P[cont].calif2*0.45) + (P[cont].calif3*0.25);
+
+	ofstream lista;
+	lista.open("memoriaalumnos.txt", ios::app);
+	lista << P[cont].nombre << endl;
+	lista << P[cont].apellido << endl;
+	lista << P[cont].correo << endl;
+	lista << P[cont].telefono << endl;
+	lista << P[cont].matricula << endl;
+	lista << P[cont].dircasa << endl;
+	lista << P[cont].dircolon << endl;
+	lista << P[cont].calif1 << endl;
+	lista << P[cont].calif2 << endl;
+	lista << P[cont].calif3 << endl;
+	lista << P[cont].califtotal << endl;
+	lista.close();
 	cont++;
 	menu();
 }
@@ -210,8 +226,8 @@ void mod() {
 		}
 	}
 	else {
-		cout << "\n¿Que desea hacer con el usuario\n" << P[elegido].matricula << "?" << endl;
-		cout << "1.- Modificar \n 2.-Eliminar\n";
+		cout << "\n¿Que desea hacer con el usuario" << P[elegido].matricula << "?" << endl;
+		cout << "1.- Modificar \n2.-Eliminar\n";
 		cin >> opmod;
 		while (opmod != 1 && opmod != 2) {
 			cout << "no valido, vuelva a seleccionar: ";

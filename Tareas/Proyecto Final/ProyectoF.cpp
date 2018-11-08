@@ -28,11 +28,30 @@ void menu();
 void instruc();
 void edit(int x);
 void delet(int x);
+void renovar();
 
 
 void main(){
 	locale::global(locale("spanish"));
-	cont = 0;
+	cont = 0; 
+	bool datos = false;
+	ifstream lista;
+	lista.open("memoriaalumnos.txt");
+		if (!lista.eof()) {
+			getline(lista, P[cont].nombre);
+			getline(lista, P[cont].apellido);
+			lista >> P[cont].correo;
+			lista >> P[cont].telefono;
+			lista >> P[cont].matricula;
+			getline(lista, P[cont].dircasa);
+			getline(lista, P[cont].dircolon);
+			lista >> P[cont].calif1;
+			lista >> P[cont].calif2;
+			lista >> P[cont].calif3;
+			lista >> P[cont].califtotal;
+			cont++;
+		}
+	lista.close();
 	menu();
 }
 
@@ -116,6 +135,7 @@ void registrar() {
 	cout << "Matricula ¿generar(1) o ingresar(2)? ";
 	int opm;
 	cin >> opm;
+	bool unica = false;
 	while (opm != 1 && opm != 2) {
 		cout << "ingrese otra opción ";
 		cin >> opm;
@@ -126,6 +146,17 @@ void registrar() {
 	else if (opm == 2) {
 		cout << "Ingrese matrícula ";
 		cin >> P[cont].matricula;
+	}
+	while (!unica) {
+		for (int i = 0; i < cont; i++) {
+			if (P[cont].matricula == P[i].matricula) {
+				cout << "Matrícula ya existente, ingrese otra: ";
+				cin >> P[cont].matricula;
+			}
+			else {
+				unica = true;
+			}
+		}
 	}
 	cin.ignore();
 	cout << "Casa y calle ";
@@ -227,7 +258,7 @@ void mod() {
 	}
 	else {
 		cout << "\n¿Que desea hacer con el usuario" << P[elegido].matricula << "?" << endl;
-		cout << "1.- Modificar \n2.-Eliminar\n";
+		cout << "1.-Modificar \n2.-Eliminar\n";
 		cin >> opmod;
 		while (opmod != 1 && opmod != 2) {
 			cout << "no valido, vuelva a seleccionar: ";
@@ -349,6 +380,7 @@ void edit(int x) {
 	if (califnueva) {
 		P[x].califtotal = (P[x].calif1*0.3) + (P[x].calif2*0.45) + (P[x].calif3*0.25);
 	}
+	renovar();
 	cout << "deseas editar algo más (1) o regresar al menú (2): ";
 		cin >> opedit;
 	while (opedit != 1 && opedit != 2) {
@@ -381,9 +413,29 @@ void edit(int x) {
 		cont--;
 		cout << "se a eliminado exitosamente" << endl;
 		system("pause>nul");
+		renovar();
 		menu();
 	}
 	else if (opdelet == 2) {
 		menu();
 	}
 }
+
+void renovar() {
+	ofstream lista;
+	lista.open("memoriaalumnos.txt", ios::out);
+	for (int i = 0;i < cont;i++) {
+		lista << P[cont].nombre << endl;
+		lista << P[cont].apellido << endl;
+		lista << P[cont].correo << endl;
+		lista << P[cont].telefono << endl;
+		lista << P[cont].matricula << endl;
+		lista << P[cont].dircasa << endl;
+		lista << P[cont].dircolon << endl;
+		lista << P[cont].calif1 << endl;
+		lista << P[cont].calif2 << endl;
+		lista << P[cont].calif3 << endl;
+		lista << P[cont].califtotal << endl;
+	}
+	lista.close();
+	}

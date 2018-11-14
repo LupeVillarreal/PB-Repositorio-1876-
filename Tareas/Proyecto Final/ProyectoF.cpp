@@ -34,24 +34,16 @@ void renovar();
 void main(){
 	locale::global(locale("spanish"));
 	cont = 0; 
-	bool datos = false;
 	ifstream lista;
-	lista.open("memoriaalumnos.txt");
-		if (!lista.eof()) {
-			getline(lista, P[cont].nombre);
-			getline(lista, P[cont].apellido);
-			lista >> P[cont].correo;
-			lista >> P[cont].telefono;
-			lista >> P[cont].matricula;
-			getline(lista, P[cont].dircasa);
-			getline(lista, P[cont].dircolon);
-			lista >> P[cont].calif1;
-			lista >> P[cont].calif2;
-			lista >> P[cont].calif3;
-			lista >> P[cont].califtotal;
+	lista.open("memoriaalumnos.data", ios::binary);
+	lista.read((char*)&P, sizeof(P));
+	lista.close();
+	for (int i = 0; i < 20; i++)
+	{
+		if (P[i].matricula != 0) {
 			cont++;
 		}
-	lista.close();
+	}
 	menu();
 }
 
@@ -69,13 +61,31 @@ void menu(){
 		break;
 	case 4: mostrar();
 		break;
-	default: break;
+	default:
+		break;
 	}
 }
 
 void instruc() {
 	system("cls");
-	cout << "desde el menu puedes escoger una de las opciones, por medio de registro podrias agregar los datos de un alumno" << endl << "por medio de eliminar podras eliminarlo de la lista, por medio de calificaciones ingresaras sus notas, cuando acabes podras darle a salir";
+	cout << "Por medio del menú central usted seleccionará la opción" << endl;
+	cout << "que usted desee, tecleando el número al cual esta" << endl;
+	cout << "relacionada la opción." << endl << endl;
+	cout << "En la opción de registrar podrá agregar un alumno a la lista," << endl;
+	cout << "añadirá cada uno de sus datos en el orden por defecto programado" << endl;
+	cout << "y al finalizar volverá al menú." << endl << endl;
+	cout << "En buscar y editar, podrá buscar a cualquier usuario por su" << endl;
+	cout << "matrícula, al ser encontrado podrá escoger entre editarlo o" << endl;
+	cout << "eliminarlo." << endl;
+	cout << "Si desea editarlo, escogerá de una lista el dato a editar de su" << endl;
+	cout << "elección, al acabar con ese dato, puede finalizar o editar otro" << endl;
+	cout << "más." << endl;
+	cout << "Con la opción de eliminar, se le preguntará si desea eliminarlo" << endl;
+	cout << "definitivamente o si quiere dejar el registro del alumno, sí" << endl;
+	cout << "escoge dejar el alumno, se devolverá directamente al menú sin más." << endl << endl;
+	cout << "En Mostrar alumnos, se mostraran los datos de todos los alumnos" << endl;
+	cout << "en el orden en que fueron registrados." << endl;
+	cout << "Y con la opción salir, cerrará el programa una vez acabara con todo.";
 	system("pause>nul");
 	menu();
 }
@@ -147,14 +157,19 @@ void registrar() {
 		cout << "Ingrese matrícula ";
 		cin >> P[cont].matricula;
 	}
-	while (!unica) {
-		for (int i = 0; i < cont; i++) {
-			if (P[cont].matricula == P[i].matricula) {
-				cout << "Matrícula ya existente, ingrese otra: ";
-				cin >> P[cont].matricula;
-			}
-			else {
-				unica = true;
+	if (cont == 0) {
+		unica = true;
+	}
+	else {
+		while (!unica) {
+			for (int i = 0; i < cont; i++) {
+				if (P[cont].matricula == P[i].matricula) {
+					cout << "Matrícula ya existente, ingrese otra: ";
+					cin >> P[cont].matricula;
+				}
+				else {
+					unica = true;
+				}
 			}
 		}
 	}
@@ -188,22 +203,8 @@ void registrar() {
 		cin >> P[cont].calif3;
 	}
 	P[cont].califtotal = (P[cont].calif1*0.3) + (P[cont].calif2*0.45) + (P[cont].calif3*0.25);
-
-	ofstream lista;
-	lista.open("memoriaalumnos.txt", ios::app);
-	lista << P[cont].nombre << endl;
-	lista << P[cont].apellido << endl;
-	lista << P[cont].correo << endl;
-	lista << P[cont].telefono << endl;
-	lista << P[cont].matricula << endl;
-	lista << P[cont].dircasa << endl;
-	lista << P[cont].dircolon << endl;
-	lista << P[cont].calif1 << endl;
-	lista << P[cont].calif2 << endl;
-	lista << P[cont].calif3 << endl;
-	lista << P[cont].califtotal << endl;
-	lista.close();
 	cont++;
+	renovar();
 	menu();
 }
 
@@ -234,14 +235,14 @@ void mod() {
 	cin >> buscado;
 	for (int i = 0; i < cont; i++) {
 		if (P[i].matricula == buscado) {
-			cout << "Se encontro a " << P[i].matricula << "\nNombre: " << P[i].nombre << "\nApellido: " << P[i].apellido << "\n¿Que desea hacer? ";
+			cout << "Se encontro a " << P[i].matricula << "\nNombre: " << P[i].nombre << "\nApellido: " << P[i].apellido;
 			elegido = i;
 			encontrado = true;
 			break;
 		}
 	}
 	if (!encontrado) {
-		cout << "no se encontró, caballero :(" << endl;
+		cout << "\nno se encontró, caballero :(" << endl;
 		cout << "volver a intentar(1) o regresar(2): ";
 		cin >> opmod;
 		while (opmod != 1 && opmod != 2) {
@@ -257,7 +258,7 @@ void mod() {
 		}
 	}
 	else {
-		cout << "\n¿Que desea hacer con el usuario" << P[elegido].matricula << "?" << endl;
+		cout << "\n¿Que desea hacer con el usuario " << P[elegido].matricula << "?" << endl;
 		cout << "1.-Modificar \n2.-Eliminar\n";
 		cin >> opmod;
 		while (opmod != 1 && opmod != 2) {
@@ -281,6 +282,7 @@ void edit(int x) {
 	int opedit, x2;
 	bool califnueva = false, condition1, condition2, condition3;
 	cin >> opedit;
+	system("cls");
 	switch (opedit) {
 	case 1: cout << "Inserte el nuevo nombre: ";
 		cin.ignore();
@@ -381,6 +383,7 @@ void edit(int x) {
 		P[x].califtotal = (P[x].calif1*0.3) + (P[x].calif2*0.45) + (P[x].calif3*0.25);
 	}
 	renovar();
+	system("cls");
 	cout << "deseas editar algo más (1) o regresar al menú (2): ";
 		cin >> opedit;
 	while (opedit != 1 && opedit != 2) {
@@ -423,19 +426,7 @@ void edit(int x) {
 
 void renovar() {
 	ofstream lista;
-	lista.open("memoriaalumnos.txt", ios::out);
-	for (int i = 0;i < cont;i++) {
-		lista << P[cont].nombre << endl;
-		lista << P[cont].apellido << endl;
-		lista << P[cont].correo << endl;
-		lista << P[cont].telefono << endl;
-		lista << P[cont].matricula << endl;
-		lista << P[cont].dircasa << endl;
-		lista << P[cont].dircolon << endl;
-		lista << P[cont].calif1 << endl;
-		lista << P[cont].calif2 << endl;
-		lista << P[cont].calif3 << endl;
-		lista << P[cont].califtotal << endl;
-	}
+	lista.open("memoriaalumnos.data", ios::binary);
+	lista.write((char*)&P, sizeof(P));
 	lista.close();
 	}

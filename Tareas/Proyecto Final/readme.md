@@ -3,18 +3,19 @@
 
 # Proyecto de Programación Básica
 
-## Manual
+Manual
 --
+
 ### Requisitos
 
 Cualquier computador capaz de correr el Visual Studio Pro(en su versión de 2017 de preferencia)
 o el Visual Studio Code.
---
+
 ### Instalación
 
 Correras el codigo del programa con el softawre que usted haya escogido, tan solo asuegurese de 
 acatar las indicaciónes.
---
+
 ### Instrucciones 
 #### Menu 
 Por medio del menú central usted seleccionará la opción que usted desee, tecleando el número al cual esta
@@ -42,6 +43,6 @@ En Mostrar alumnos, se mostraran los datos de todos los alumnos en el orden en q
 
 #### Salir
 Y con la opción salir, cerrará el programa una vez acabara con todo.
---
+
 
 Gracias, vuelvan prontos 

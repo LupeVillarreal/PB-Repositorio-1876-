@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <math.h>
 using namespace std;
 
 struct Alumno
@@ -19,6 +20,7 @@ struct Alumno
 };
 
 int cont, opc;
+float califraw;
 Alumno P[20];
 
 void registrar();
@@ -202,7 +204,8 @@ void registrar() {
 		}
 		cin >> P[cont].calif3;
 	}
-	P[cont].califtotal = (P[cont].calif1*0.3) + (P[cont].calif2*0.45) + (P[cont].calif3*0.25);
+	califraw = (P[cont].calif1*0.3) + (P[cont].calif2*0.45) + (P[cont].calif3*0.25);
+	P[cont].califtotal = (round(califraw * 100)) / 100;
 	cont++;
 	renovar();
 	menu();
@@ -380,7 +383,8 @@ void edit(int x) {
 		break;
 	}
 	if (califnueva) {
-		P[x].califtotal = (P[x].calif1*0.3) + (P[x].calif2*0.45) + (P[x].calif3*0.25);
+		califraw = (P[x].calif1*0.3) + (P[x].calif2*0.45) + (P[x].calif3*0.25);
+		P[x].califtotal = (round(califraw * 100)) / 100;
 	}
 	renovar();
 	system("cls");
